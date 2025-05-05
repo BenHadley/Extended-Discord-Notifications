@@ -25,15 +25,7 @@ public interface DiscordNotificationsConfig extends Config {
 			position = 0
 	)
 	String webhook();
-
-	@ConfigItem(
-			keyName = "sendAllToMasterWebhook",
-			name = "Send All to Master Webhook",
-			description = "Send all notifications to the above webhook only.",
-			section = webhookConfig,
-			position = 1
-	)
-	default boolean useMasterWebhook() { return true; }
+	// End of Webhook config section
 
 	// Levelling config section
 	@ConfigSection(

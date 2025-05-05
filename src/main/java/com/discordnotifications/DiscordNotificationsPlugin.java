@@ -297,7 +297,7 @@ public class DiscordNotificationsPlugin extends Plugin
 
 		DiscordWebhookBody discordWebhookBody = new DiscordWebhookBody();
 		discordWebhookBody.setContent(questMessageString);
-		sendWebhook(discordWebhookBody, config.sendQuestingScreenshot());
+		sendWebhook(discordWebhookBody, config.sendQuestingScreenshot(), notificationType.Quest);
 	}
 
 	private void sendCombatAchievementMessage(String task) {
@@ -310,7 +310,7 @@ public class DiscordNotificationsPlugin extends Plugin
 
 		DiscordWebhookBody discordWebhookBody = new DiscordWebhookBody();
 		discordWebhookBody.setContent(combatAchievementMessageString);
-		sendWebhook(discordWebhookBody, config.sendCombatAchievementsScreenshot());
+		sendWebhook(discordWebhookBody, config.sendCombatAchievementsScreenshot(), notificationType.CombatAchievement);
 	}
 
 	private void sendCollectionLogMessage(String entry) {
@@ -323,7 +323,7 @@ public class DiscordNotificationsPlugin extends Plugin
 
 		DiscordWebhookBody discordWebhookBody = new DiscordWebhookBody();
 		discordWebhookBody.setContent(collectionLogMessageString);
-		sendWebhook(discordWebhookBody, config.sendCollectionLogScreenshot());
+		sendWebhook(discordWebhookBody, config.sendCollectionLogScreenshot(), notificationType.CollectionLog);
 	}
 
 	private void sendDeathMessage()
@@ -334,7 +334,7 @@ public class DiscordNotificationsPlugin extends Plugin
 
 		DiscordWebhookBody discordWebhookBody = new DiscordWebhookBody();
 		discordWebhookBody.setContent(deathMessageString);
-		sendWebhook(discordWebhookBody, config.sendDeathScreenshot());
+		sendWebhook(discordWebhookBody, config.sendDeathScreenshot(), notificationType.Death);
 	}
 
 	private void sendClueMessage()
@@ -345,7 +345,7 @@ public class DiscordNotificationsPlugin extends Plugin
 
 		DiscordWebhookBody discordWebhookBody = new DiscordWebhookBody();
 		discordWebhookBody.setContent(clueMessage);
-		sendWebhook(discordWebhookBody, config.sendClueScreenshot());
+		sendWebhook(discordWebhookBody, config.sendClueScreenshot(), notificationType.Clue);
 	}
 
 	private void sendLevelMessage()
@@ -378,7 +378,7 @@ public class DiscordNotificationsPlugin extends Plugin
 
 		DiscordWebhookBody discordWebhookBody = new DiscordWebhookBody();
 		discordWebhookBody.setContent(levelUpString);
-		sendWebhook(discordWebhookBody, config.sendLevellingScreenshot());
+		sendWebhook(discordWebhookBody, config.sendLevellingScreenshot(), notificationType.Level);
 	}
 
 	private void sendPetMessage()
@@ -389,12 +389,13 @@ public class DiscordNotificationsPlugin extends Plugin
 
 		DiscordWebhookBody discordWebhookBody = new DiscordWebhookBody();
 		discordWebhookBody.setContent(petMessageString);
-		sendWebhook(discordWebhookBody, config.sendPetScreenshot());
+		sendWebhook(discordWebhookBody, config.sendPetScreenshot(), notificationType.Pet);
 	}
 
-	private void sendWebhook(DiscordWebhookBody discordWebhookBody, boolean sendScreenshot)
+	private void sendWebhook(DiscordWebhookBody discordWebhookBody, boolean sendScreenshot, notificationType type)
 	{
-		String configUrl = config.webhook();
+
+		String configUrl = getWebhookUrl(type);
 		if (Strings.isNullOrEmpty(configUrl)) { return; }
 
 		List<String> webhookUrls =
@@ -422,6 +423,36 @@ public class DiscordNotificationsPlugin extends Plugin
 				buildRequestAndSend(url, requestBodyBuilder);
 			}
 		}
+	}
+
+	private String getWebhookUrl(notificationType type){
+		String url;
+		switch (type) {
+			case Level:
+				url = config.levelWebhook();
+				break;
+			case Quest:
+				url = config.questWebhook();
+				break;
+			case Death:
+				url = config.deathWebhook();
+				break;
+			case Pet:
+				url = config.petWebhook();
+				break;
+			case Clue:
+				url = config.clueWebhook();
+				break;
+			case CollectionLog:
+				url = config.collectionLogWebhook();
+				break;
+			case CombatAchievement:
+				url = config.combatAchievementWebhook();
+				break;
+			default:
+				url = config.webhook();
+		}
+		return url;
 	}
 
 	private void sendWebhookWithScreenshot(HttpUrl url, MultipartBody.Builder requestBodyBuilder)
@@ -540,5 +571,14 @@ public class DiscordNotificationsPlugin extends Plugin
 		}
 
 		return quest;
+	}
+	private enum notificationType {
+		Level,
+		Quest,
+		Death,
+		Clue,
+		Pet,
+		CollectionLog,
+		CombatAchievement;
 	}
 }
