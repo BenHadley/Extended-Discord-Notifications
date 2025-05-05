@@ -26,6 +26,15 @@ public interface DiscordNotificationsConfig extends Config {
 	)
 	String webhook();
 
+	@ConfigItem(
+			keyName = "sendAllToMasterWebhook",
+			name = "Send All to Master Webhook",
+			description = "Send all notifications to the above webhook only.",
+			section = webhookConfig,
+			position = 1
+	)
+	default boolean useMasterWebhook() { return true; }
+
 	// Levelling config section
 	@ConfigSection(
 			name = "Levelling",
@@ -42,9 +51,7 @@ public interface DiscordNotificationsConfig extends Config {
 			section = levellingConfig,
 			position = 1
 	)
-	default boolean includeLevelling() {
-		return false;
-	}
+	default boolean includeLevelling() { return false; }
 
 	@ConfigItem(
 			keyName = "minimumLevel",
@@ -120,11 +127,20 @@ public interface DiscordNotificationsConfig extends Config {
 			name = "Include levelling screenshots",
 			description = "Include a screenshot when leveling up.",
 			section = levellingConfig,
-			position = 100
+			position = 9
 	)
 	default boolean sendLevellingScreenshot() {
 		return false;
 	}
+
+	@ConfigItem(
+			keyName = "levelWebhook",
+			name = "Level Webhook",
+			description = "Webhook to send to when Leveling up",
+			section = levellingConfig,
+			position = 10
+	)
+	default String levelWebhook() { return ""; }
 	// End levelling config section
 
 	// Questing config section
@@ -140,7 +156,8 @@ public interface DiscordNotificationsConfig extends Config {
 			keyName = "includeQuests",
 			name = "Send Quest Notifications",
 			description = "Send messages when you complete a quest.",
-			section = questingConfig
+			section = questingConfig,
+			position = 0
 	)
 	default boolean includeQuestComplete() {
 		return false;
@@ -160,11 +177,20 @@ public interface DiscordNotificationsConfig extends Config {
 			name = "Include quest screenshots",
 			description = "Include a screenshot with the Discord notification when leveling up.",
 			section = questingConfig,
-			position = 100
+			position = 2
 	)
 	default boolean sendQuestingScreenshot() {
 		return false;
 	}
+
+	@ConfigItem(
+			keyName = "questWebhook",
+			name = "Quest Webhook",
+			description = "Webhook to send to when completing a quest",
+			section = questingConfig,
+			position = 3
+	)
+	default String questWebhook() { return ""; }
 	// End questing config section
 
 	// Death config section
@@ -180,7 +206,8 @@ public interface DiscordNotificationsConfig extends Config {
 			keyName = "includeDeaths",
 			name = "Send Death Notifications",
 			description = "Send messages when you die to Discord.",
-			section = deathConfig
+			section = deathConfig,
+			position = 0
 	)
 	default boolean includeDeaths() { return false; }
 
@@ -198,11 +225,20 @@ public interface DiscordNotificationsConfig extends Config {
 			name = "Include death screenshots",
 			description = "Include a screenshot with the Discord notification when you die.",
 			section = deathConfig,
-			position = 100
+			position = 2
 	)
 	default boolean sendDeathScreenshot() {
 		return false;
 	}
+
+	@ConfigItem(
+			keyName = "deathWebhook",
+			name = "Death Webhook",
+			description = "Webhook to send to upon dying",
+			section = deathConfig,
+			position = 10
+	)
+	default String deathWebhook() { return ""; }
 	// End death config section
 
 	// Clue config section
@@ -218,7 +254,8 @@ public interface DiscordNotificationsConfig extends Config {
 			keyName = "includeClues",
 			name = "Send Clue Notifications",
 			description = "Send messages when you complete a clue scroll.",
-			section = clueConfig
+			section = clueConfig,
+			position = 0
 	)
 	default boolean includeClues() { return false; }
 
@@ -236,11 +273,20 @@ public interface DiscordNotificationsConfig extends Config {
 			name = "Include Clue screenshots",
 			description = "Include a screenshot with the Discord notification when you complete a clue.",
 			section = clueConfig,
-			position = 100
+			position = 2
 	)
 	default boolean sendClueScreenshot() {
 		return false;
 	}
+
+	@ConfigItem(
+			keyName = "clueWebhook",
+			name = "Clue Webhook",
+			description = "Webhook to send to when opening a clue casket",
+			section = clueConfig,
+			position = 3
+	)
+	default String clueWebhook() { return ""; }
 	// End clue config section
 
 	// Pet config section
@@ -256,7 +302,8 @@ public interface DiscordNotificationsConfig extends Config {
 			keyName = "includePets",
 			name = "Send Pet Notifications",
 			description = "Send messages when you receive a pet.",
-			section = petConfig
+			section = petConfig,
+			position = 0
 	)
 	default boolean includePets() { return false; }
 
@@ -274,12 +321,23 @@ public interface DiscordNotificationsConfig extends Config {
 			name = "Include Pet screenshots",
 			description = "Include a screenshot with the Discord notification when you receive a pet.",
 			section = petConfig,
-			position = 100
+			position = 2
 	)
 	default boolean sendPetScreenshot() {
 		return false;
 	}
 
+	@ConfigItem(
+			keyName = "petWebhook",
+			name = "Pet Webhook",
+			description = "Webhook to send to when receiving a pet",
+			section = petConfig,
+			position = 3
+	)
+	default String petWebhook() { return ""; }
+	// End of Pet config section
+
+	// Collection log config section
 	@ConfigSection(
 		name = "Collection logs",
 		description = "The config for collection logs",
@@ -293,7 +351,7 @@ public interface DiscordNotificationsConfig extends Config {
 		name = "Collection Log Notifications",
 		description = "Message to send to Discord on collection logs completions",
 		section = collectionLogsConfig,
-		position = 1
+		position = 0
 	)
 	default boolean includeCollectionLogs() { return false; }
 
@@ -302,7 +360,7 @@ public interface DiscordNotificationsConfig extends Config {
 		name = "Collection log Message",
 		description = "Message to send to Discord on collection logs completions",
 		section = collectionLogsConfig,
-		position = 2
+		position = 1
 	)
 	default String collectionLogMessage() { return "$name has just completed a collection log: $entry"; }
 
@@ -311,12 +369,23 @@ public interface DiscordNotificationsConfig extends Config {
 		name = "Include collection log screenshots",
 		description = "Include a screenshot with the Discord notification when you fill a new collection log slot",
 		section = collectionLogsConfig,
-		position = 3
+		position = 2
 	)
 	default boolean sendCollectionLogScreenshot() {
 		return false;
 	}
 
+	@ConfigItem(
+			keyName = "collectionLogWebhook",
+			name = "Collection Log Webhook",
+			description = "Webhook to send to when collecting a collection log item",
+			section = collectionLogsConfig,
+			position = 3
+	)
+	default String collectionLogWebhook() { return ""; }
+	// End of Collection Log config section
+
+	// Combat Achievement config section
 	@ConfigSection(
 		name = "Combat Achievements",
 		description = "The config for combat achievements",
@@ -330,7 +399,7 @@ public interface DiscordNotificationsConfig extends Config {
 		name = "Combat Achievements Notifications",
 		description = "Message to send to Discord on combat achievements completions",
 		section = combatAchievementsConfig,
-		position = 1
+		position = 0
 	)
 	default boolean includeCombatAchievements() { return false; }
 
@@ -339,7 +408,7 @@ public interface DiscordNotificationsConfig extends Config {
 		name = "Combat Achievement Message",
 		description = "Message to send to Discord on combat achievements completions",
 		section = combatAchievementsConfig,
-		position = 2
+		position = 1
 	)
 	default String combatAchievementsMessage() { return "$name has just completed a combat achievement: $achievement"; }
 
@@ -348,9 +417,19 @@ public interface DiscordNotificationsConfig extends Config {
 		name = "Include combat achievements screenshots",
 		description = "Include a screenshot with the Discord notification when you complete a combat achievement",
 		section = combatAchievementsConfig,
-		position = 100
+		position = 2
 	)
 	default boolean sendCombatAchievementsScreenshot() {
 		return false;
 	}
+
+	@ConfigItem(
+			keyName = "combatAchievementWebhook",
+			name = "Combat Achievement Webhook",
+			description = "Webhook to send to when completing a combat achievement",
+			section = combatAchievementsConfig,
+			position = 3
+	)
+	default String combatAchievementWebhook() { return ""; }
+	// End of Combat Achievement config section
 }
